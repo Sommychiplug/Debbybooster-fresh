@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Supabase Test</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+  <h2>Supabase Connection Test</h2>
+  <div id="status">Loading...</div>
+  <button id="testBtn">Test Sign Up</button>
+
+  <script>
+    const SUPABASE_URL = 'https:/ksasnbgftteldzevstmx.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtzYXNuYmdmdHRlbGR6ZXZzdG14Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE0MjY0NjQsImV4cCI6MjA4NzAwMjQ2NH0.4nAGLyjjaJr2Vf2ZyZInpEq0TxZAgiFwWws6_7GRgVs';
+
+    const statusDiv = document.getElementById('status');
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    console.log('Supabase created:', supabase);
+
+    document.getElementById('testBtn').onclick = async () => {
+      statusDiv.innerText = 'Attempting sign up...';
+      try {
+        const { data, error } = await supabase.auth.signUp({
+          email: 'test-' + Date.now() + '@example.com',
+          password: 'password123'
+        });
+        if (error) throw error;
+        statusDiv.innerText = '✅ Sign up successful! Check console for user data.';
+        console.log('User signed up:', data);
+      } catch (err) {
+        statusDiv.innerText = '❌ Error: ' + err.message;
+        console.error(err);
+      }
+    };
+  </script>
+</body>
+</html>

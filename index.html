@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DebbyBooster | Social Media Boost</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body class="bg-gray-50">
+
+<!-- Navbar -->
+<nav class="bg-white shadow p-4">
+  <div class="container mx-auto flex justify-between items-center">
+    <h1 class="text-2xl font-bold text-purple-600">DebbyBooster</h1>
+    <div>
+      <a href="#about" class="mr-4 text-gray-700">About</a>
+      <a href="#services" class="mr-4 text-gray-700">Services</a>
+      <a href="dashboard.html" class="bg-purple-600 text-white px-4 py-2 rounded">Dashboard</a>
+    </div>
+  </div>
+</nav>
+
+<!-- Announcement Banner -->
+<div id="announcement" class="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 hidden">
+  <p class="font-bold">Announcement</p>
+  <p id="announcement-message"></p>
+</div>
+
+<!-- Hero / About -->
+<section id="about" class="container mx-auto py-16 px-4">
+  <h2 class="text-4xl font-bold text-center mb-8">Welcome to DebbyBooster</h2>
+  <p class="text-lg text-gray-700 text-center max-w-3xl mx-auto">
+    We help you grow your social media presence quickly and safely. 
+    Choose from a variety of services – Instagram followers, likes, Facebook followers, and more. 
+    Our automated system delivers orders even while you sleep.
+  </p>
+  <div class="text-center mt-8">
+    <a href="#auth-section" class="bg-purple-600 text-white px-8 py-3 rounded-full text-lg font-semibold hover:bg-purple-700 transition">Get Started</a>
+  </div>
+</section>
+
+<!-- Services Preview -->
+<section id="services" class="container mx-auto py-16 px-4">
+  <h3 class="text-2xl font-bold text-center mb-8">Our Services</h3>
+  <div class="grid md:grid-cols-3 gap-6">
+    <div class="bg-white p-6 rounded shadow">
+      <h4 class="font-bold text-xl">Instagram Followers</h4>
+      <p class="text-gray-600">Min: 100 | Max: 10,000</p>
+    </div>
+    <div class="bg-white p-6 rounded shadow">
+      <h4 class="font-bold text-xl">Instagram Likes</h4>
+      <p class="text-gray-600">Min: 50 | Max: 5,000</p>
+    </div>
+    <div class="bg-white p-6 rounded shadow">
+      <h4 class="font-bold text-xl">Facebook Followers</h4>
+      <p class="text-gray-600">Min: 100 | Max: 5,000</p>
+    </div>
+  </div>
+</section>
+
+<!-- Login / Signup Section -->
+<div id="auth-section" class="container mx-auto py-16 px-4 max-w-md">
+  <div class="bg-white p-8 rounded shadow">
+    <h2 class="text-2xl font-bold mb-4 text-center">Login or Sign Up</h2>
+    <div id="auth-error" class="text-red-500 mb-2"></div>
+    <form id="auth-form">
+      <input type="email" id="email" placeholder="Email" class="w-full p-2 border rounded mb-2" required>
+      <input type="password" id="password" placeholder="Password" class="w-full p-2 border rounded mb-2" required>
+      <input type="text" id="referral-code" placeholder="Referral Code (optional for signup)" class="w-full p-2 border rounded mb-2">
+      <button type="submit" id="auth-submit" class="bg-purple-600 text-white px-4 py-2 rounded w-full">Login</button>
+    </form>
+    <p class="text-center mt-4">
+      <span id="auth-toggle-text">Don't have an account?</span>
+      <button id="auth-toggle" class="text-purple-600 ml-1">Sign Up</button>
+    </p>
+  </div>
+</div>
+
+<!-- Footer -->
+<footer class="bg-gray-800 text-white py-8">
+  <div class="container mx-auto text-center">
+    <p class="mb-4">Contact us:</p>
+    <p class="mb-2"><i class="fas fa-envelope mr-2"></i> chimachisom188@gmail.com</p>
+    <p><i class="fab fa-whatsapp mr-2"></i> <a href="https://wa.me/2349161672805" class="underline">09161672805</a></p>
+    <p class="mt-6 text-sm">© 2025 DebbyBooster. All rights reserved.</p>
+  </div>
+</footer>
+
+<!-- Floating WhatsApp Icon -->
+<a href="https://wa.me/2349161672805" class="fixed bottom-4 right-4 bg-green-500 text-white p-4 rounded-full shadow-lg hover:bg-green-600">
+  <i class="fab fa-whatsapp text-2xl"></i>
+</a>
+
+<script>
+  (function() {
+    const supabase = window.supabase.createClient(
+      'https://ksasnbgftteldzevstmx.supabase.co',
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtzYXNuYmdmdHRlbGR6ZXZzdG14Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE0MjY0NjQsImV4cCI6MjA4NzAwMjQ2NH0.4nAGLyjjaJr2Vf2ZyZInpEq0TxZAgiFwWws6_7GRgVs'                           
+    );
+    window.supabase = supabase;
+
+    // Auth functions
+    window.signUp = async (email, password, referralCode = '') => {
+      const { data, error } = await supabase.auth.signUp({ email, password });
+      if (error) throw error;
+      return data.user;
+    };
+    window.signIn = async (email, password) => {
+      const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+      if (error) throw error;
+      return data.user;
+    };
+
+    // UI toggle
+    let isLogin = true;
+    const authToggle = document.getElementById('auth-toggle');
+    const authSubmit = document.getElementById('auth-submit');
+    const authToggleText = document.getElementById('auth-toggle-text');
+    const referralInput = document.getElementById('referral-code');
+    const errorDiv = document.getElementById('auth-error');
+
+    authToggle.addEventListener('click', () => {
+      isLogin = !isLogin;
+      if (isLogin) {
+        authSubmit.innerText = 'Login';
+        authToggleText.innerText = "Don't have an account?";
+        authToggle.innerText = 'Sign Up';
+        referralInput.style.display = 'none';
+      } else {
+        authSubmit.innerText = 'Sign Up';
+        authToggleText.innerText = 'Already have an account?';
+        authToggle.innerText = 'Login';
+        referralInput.style.display = 'block';
+      }
+    });
+    referralInput.style.display = 'none';
+
+    document.getElementById('auth-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      const referralCode = document.getElementById('referral-code').value;
+      errorDiv.innerText = '';
+
+      try {
+        if (isLogin) {
+          await window.signIn(email, password);
+        } else {
+          await window.signUp(email, password, referralCode);
+        }
+        window.location.href = '/dashboard.html';
+      } catch (err) {
+        errorDiv.innerText = err.message;
+      }
+    });
+
+    // Announcement loader
+    async function loadAnnouncement() {
+      try {
+        const { data, error } = await supabase
+          .from('announcements')
+          .select('message')
+          .order('created_at', { ascending: false })
+          .limit(1);
+        if (data && data.length > 0) {
+          document.getElementById('announcement-message').innerText = data[0].message;
+          document.getElementById('announcement').classList.remove('hidden');
+        }
+      } catch (err) {}
+    }
+    loadAnnouncement();
+  })();
+</script>
+</body>
+</html>
