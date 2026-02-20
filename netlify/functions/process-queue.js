@@ -19,7 +19,7 @@ exports.handler = async () => {
   for (const order of orders) {
     try {
       // Call external SMM API (replace with your actual provider)
-      const apiResponse = await fetch('https://smm-api.example.com/order', {
+      const apiResponse = await fetch('https://exosupplier.com/api/v2/order', {
         method: 'POST',
         headers: { 
           'API-Key': process.env.SMM_API_KEY,
