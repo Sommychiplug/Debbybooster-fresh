@@ -1,11 +1,17 @@
 const { createClient } = require('@supabase/supabase-js');
 
 exports.handler = async (event) => {
+  // Only allow POST
+  if (event.httpMethod !== 'POST') {
+    return { statusCode: 405, body: 'Method Not Allowed' };
+  }
+
   const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_ANON_KEY);
   
   try {
     const { user_id, service_id, quantity, link, total } = JSON.parse(event.body);
 
+    // Validate user
     const { data: profile, error: profileError } = await supabase
       .from('profiles')
       .select('balance')
@@ -18,6 +24,7 @@ exports.handler = async (event) => {
       return { statusCode: 400, body: JSON.stringify({ error: 'Insufficient balance' }) };
     }
 
+    // Use the database function to place order atomically
     const { error: orderError } = await supabase.rpc('place_order', {
       p_user_id: user_id,
       p_service_id: service_id,
@@ -33,7 +40,7 @@ exports.handler = async (event) => {
       body: JSON.stringify({ success: true })
     };
   } catch (err) {
-    console.error(err);
+    console.error('Create order error:', err);
     return { statusCode: 500, body: JSON.stringify({ error: err.message }) };
   }
 };

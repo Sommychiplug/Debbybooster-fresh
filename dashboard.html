@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+<head><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/config.js"></script>
+<script src="js/auth.js"></script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dashboard - DebbyBooster</title>
@@ -52,8 +54,35 @@
         <p class="mt-2 text-sm">Refer a friend and earn ₦100 when they deposit ₦500+.</p>
         <p class="mt-2">Balance: ₦<span id="balance">0.00</span></p>
         <button id="withdraw-btn" class="mt-2 bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">Withdraw Bonus (min ₦1000)</button>
-      </div>
-    </div>
+      </div><div id="user-info" class="bg-white p-4 rounded shadow mb-4">
+  <p>Loading...</p>
+</div>
+
+<!-- Stats Cards -->
+<div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
+  ... (your stats cards) ...
+</div>
+<!-- Order status counts (optional extra) -->
+<div class="grid grid-cols-3 gap-2 mb-4 text-sm">
+  ... (your extra stats) ...
+</div>
+
+<div class="grid md:grid-cols-3 gap-4">
+  <!-- Services Card -->
+  <!-- Place Order Card -->
+  <!-- Referral Card -->
+</div>
+
+<!-- New Deposit Card -->
+<div class="bg-white p-4 rounded shadow">
+  <h2 class="font-bold text-lg mb-2">Deposit Funds</h2>
+  <button id="show-deposit-form" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Make a Deposit</button>
+  <div id="deposit-form-container" class="hidden mt-4">
+    <input type="number" id="deposit-amount" placeholder="Amount (₦)" class="w-full p-2 border rounded mb-2" min="100">
+    <button id="submit-deposit" class="bg-green-600 text-white px-4 py-2 rounded w-full">Proceed to Payment</button>
+    <div id="deposit-error" class="text-red-500 mt-2"></div>
+  </div>
+</div>
 
     <!-- Orders History -->
     <div class="bg-white p-4 rounded shadow mt-4">

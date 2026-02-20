@@ -77,7 +77,9 @@
     </p>
   </div>
 </div>
-
+<p class="text-center mt-2">
+  <a href="#" id="forgot-password" class="text-sm text-purple-600 hover:underline">Forgot password?</a>
+</p>
 <!-- Footer -->
 <footer class="bg-gray-800 text-white py-8">
   <div class="container mx-auto text-center">
@@ -172,6 +174,19 @@
     }
     loadAnnouncement();
   })();
-</script>
+</script>document.getElementById('forgot-password').addEventListener('click', async (e) => {
+  e.preventDefault();
+  const email = prompt('Enter your email address:');
+  if (!email) return;
+  try {
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: window.location.origin + '/reset-password.html',
+    });
+    if (error) throw error;
+    alert('Password reset email sent! Check your inbox.');
+  } catch (err) {
+    alert(err.message);
+  }
+});
 </body>
 </html>

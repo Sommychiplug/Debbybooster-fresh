@@ -1,0 +1,18 @@
+[build]
+  # No build command needed for static HTML/JS
+  command = "echo 'No build required'"
+  # Directory where your static files are (the root)
+  publish = "."
+  # Directory where your serverless functions live
+  functions = "netlify/functions"
+
+# Optional: Set Node.js version for functions (if you need a specific version)
+# [functions]
+#   node_bundler = "esbuild"
+# You can also set environment variables here, but it's safer to set them in the Netlify UI.
+
+# Optional: Add redirects if needed (e.g., for the callback)
+# [[redirects]]
+#   from = "/payment-callback"
+#   to = "/payment-callback.html"
+#   status = 200
