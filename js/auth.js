@@ -1,8 +1,7 @@
-// js/auth.js (complete)
+// Define functions first
 async function signUp(email, password, referralCode = '') {
   const { data, error } = await supabase.auth.signUp({ email, password });
   if (error) throw error;
-
   const user = data.user;
   if (user) {
     const refCode = generateReferralCode();
@@ -15,9 +14,7 @@ async function signUp(email, password, referralCode = '') {
         .single();
       if (referrer) referredBy = referrer.id;
     }
-
-    // Insert profile
-    const { error: profileError } = await supabase.from('profiles').insert({
+    await supabase.from('profiles').insert({
       id: user.id,
       email: user.email,
       referral_code: refCode,
@@ -25,9 +22,6 @@ async function signUp(email, password, referralCode = '') {
       role: 'user',
       balance: 0,
     });
-    if (profileError) throw profileError;
-
-    // If referred, create referral record
     if (referredBy) {
       await supabase.from('referrals').insert({
         referrer_id: referredBy,
@@ -39,4 +33,46 @@ async function signUp(email, password, referralCode = '') {
   return user;
 }
 
-// ... (rest of auth functions remain the same)
+async function signIn(email, password) {
+  const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+  if (error) throw error;
+  return data.user;
+}
+
+async function signOut() {
+  const { error } = await supabase.auth.signOut();
+  if (error) throw error;
+}
+
+function generateReferralCode(length = 8) {
+  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+  let result = '';
+  for (let i = 0; i < length; i++) {
+    result += chars.charAt(Math.floor(Math.random() * chars.length));
+  }
+  return result;
+}
+
+async function getCurrentUser() {
+  const { data: { session } } = await supabase.auth.getSession();
+  return session?.user ?? null;
+}
+
+async function isAdmin(userId) {
+  const { data, error } = await supabase
+    .from('profiles')
+    .select('role')
+    .eq('id', userId)
+    .single();
+  return !error && data?.role === 'admin';
+}
+
+// Attach to window (after definitions)
+window.signUp = signUp;
+window.signIn = signIn;
+window.signOut = signOut;
+window.generateReferralCode = generateReferralCode;
+window.getCurrentUser = getCurrentUser;
+window.isAdmin = isAdmin;
+
+console.log('Auth functions loaded');
